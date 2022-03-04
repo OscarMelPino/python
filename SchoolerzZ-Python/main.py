@@ -4,8 +4,8 @@ import database_connection
 # VARIABLES
 MyDB = database_connection.SchoolerzDatabase
 userType = ''
-
-
+user = ''
+usuario = ''
 def Welcome():
     print("*******************************")
     print("***      MENU PRINCIPAL     ***")
@@ -26,15 +26,20 @@ def SelectOption(max) -> int:
             print("Eso no es un número, bobo.")
 
 def MainLogin() -> bool:
+    global user
     user = input("Introduce tu nombre de usuario.\n> ")
     password = input("Introduce tu contraseña.\n> ")
     return MyDB.Login(MyDB, userType, user, password)
 
 def WelcomeActions(cosa):
+    global usuario
     if cosa == 1:
         if not MainLogin():
             print("Datos incorrectos.")
             Welcome()
+        usuario = userType + user #Concatenamos el tipo de usuario con el nick
+        if userType == 'M':
+            ManagerActionsMenu()
         # Login valido, hacer cosas de después
     if cosa == 2:
         UserType()
@@ -88,7 +93,7 @@ def RegistrarEstudiante():
     email = input("Introduce dirección de correo electrónico.\n> ")
     password = input("Introduce una contraseña.\n> ")
     # MyDB.CreateNewStudent( más todo lo de arriba)
-    if not MyDB.CreateNewStudent(MyDB, nombre, ape1, ape2, nacimiento, nacionalidad, pais, ciudad, postCode, direc, email, password):
+    if not MyDB.CreateNewStudent(MyDB, usuario, nombre, ape1, ape2, nacimiento, nacionalidad, pais, ciudad, postCode, direc, email, password, '', '', ''):
         print("Algo ha fallado, revise los datos.")
         ManagerActionsMenu()
         return

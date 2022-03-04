@@ -29,9 +29,9 @@ class SchoolerzDatabase:
             return True
         return False
 
-    def CreateNewStudent(self, nombre, ape1, ape2, nacimiento, nacionalidad, pais, ciudad, postCode, direc, email, password) -> bool:
+    def CreateNewStudent(self, nick, nombre, ape1, ape2, nacimiento, nacionalidad, pais, ciudad, postCode, direc, email, password, obs, med, photo) -> bool:
 
-        query = f"CALL `pa_AddStudent`('{nombre}','{nombre}','{ape1}','{ape2}','{nacimiento}','{nacionalidad}','{pais}','{ciudad}','{postCode}','{direc}','{email}','{password}');"
+        query = f"CALL `pa_AddStudent`('{nick}','{nombre}','{ape1}','{ape2}','{nacimiento}','{nacionalidad}','{pais}','{ciudad}','{postCode}','{direc}','{email}','{password}','{obs}','{med}','{photo}');" #Falta coger el parámetro de salida
         if self.ExecuteProcedure(self, query) == 0:
             return True
         return False
