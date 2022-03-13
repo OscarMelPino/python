@@ -66,11 +66,37 @@ def GetParentData(cursor, parentNick):
     sql = f"SELECT sz_003_name, SZ_003_SN1, SZ_003_SN2, SZ_003_Birth, SZ_003_Nationality, SZ_003_Country, SZ_003_City, SZ_003_PostalCode, SZ_003_Address, SZ_003_Nick, SZ_003_Email, SZ_003_Phone1, SZ_003_Phone2 FROM `sz_003_parents` where sz_003_nick LIKE '{parentNick}';"
     cursor.execute(sql)
     parent = [cursor.fetchone()['sz_003_name'], cursor.fetchone()['SZ_003_SN1'],
-              cursor.fetchone()['SZ_003_SN2'], cursor.fetchone()['SZ_003_Birth'],
+              cursor.fetchone()['SZ_003_SN2'], str(cursor.fetchone()['SZ_003_Birth']),
               cursor.fetchone()['SZ_003_Nationality'], cursor.fetchone()['SZ_003_Country'],
               cursor.fetchone()['SZ_003_City'], cursor.fetchone()['SZ_003_PostalCode'],
               cursor.fetchone()['SZ_003_Address'], cursor.fetchone()['SZ_003_Nick'],
               cursor.fetchone()['SZ_003_Email'], cursor.fetchone()['SZ_003_Phone1'],
               cursor.fetchone()['SZ_003_Phone2']]
     return parent # Devuelve una lista con los datos del padre para meterlos en un formulario y 
+                  #si los queremos cambiar cambiarlos o borrar dentro del html en el que se cargan
+
+def GetTeacherData(cursor, teacherNick):
+    sql = f"SELECT sz_008_name, SZ_008_SN1, SZ_008_SN2, SZ_008_Birth, SZ_008_Nationality, SZ_008_Country, SZ_008_City, SZ_008_PostalCode, SZ_008_Address, SZ_008_Nick, SZ_008_Email, SZ_008_Phone1, SZ_008_Phone2 FROM `sz_008_teachers` where sz_008_nick LIKE '{teacherNick}';"
+    cursor.execute(sql)
+    teacher = [cursor.fetchone()['sz_008_name'], cursor.fetchone()['SZ_008_SN1'],
+              cursor.fetchone()['SZ_008_SN2'], str(cursor.fetchone()['SZ_008_Birth']),
+              cursor.fetchone()['SZ_008_Nationality'], cursor.fetchone()['SZ_008_Country'],
+              cursor.fetchone()['SZ_008_City'], cursor.fetchone()['SZ_008_PostalCode'],
+              cursor.fetchone()['SZ_008_Address'], cursor.fetchone()['SZ_008_Nick'],
+              cursor.fetchone()['SZ_008_Email'], cursor.fetchone()['SZ_008_Phone1'],
+              cursor.fetchone()['SZ_008_Phone2']]
+    return teacher # Devuelve una lista con los datos del teacher para meterlos en un formulario y 
+                  #si los queremos cambiar cambiarlos o borrar dentro del html en el que se cargan
+
+def GetStudentData(cursor, studentNick):
+    sql = f"SELECT sz_002_name, SZ_002_SN1, SZ_002_SN2, SZ_002_Birth, SZ_002_Nationality, SZ_002_Country, SZ_002_City, SZ_002_PostalCode, SZ_002_Address, SZ_002_Nick, SZ_002_Email, SZ_002_Phone1, SZ_002_Phone2 FROM `sz_002_students` where sz_002_nick LIKE '{studentNick}';"
+    cursor.execute(sql)
+    student = [cursor.fetchone()['sz_002_name'], cursor.fetchone()['SZ_002_SN1'],
+              cursor.fetchone()['SZ_002_SN2'], str(cursor.fetchone()['SZ_002_Birth']),
+              cursor.fetchone()['SZ_002_Nationality'], cursor.fetchone()['SZ_002_Country'],
+              cursor.fetchone()['SZ_002_City'], cursor.fetchone()['SZ_002_PostalCode'],
+              cursor.fetchone()['SZ_002_Address'], cursor.fetchone()['SZ_002_Nick'],
+              cursor.fetchone()['SZ_002_Email'], cursor.fetchone()['SZ_002_Phone1'],
+              cursor.fetchone()['SZ_002_Phone2']]
+    return student # Devuelve una lista con los datos del teacher para meterlos en un formulario y 
                   #si los queremos cambiar cambiarlos o borrar dentro del html en el que se cargan
