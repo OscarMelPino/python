@@ -1,5 +1,3 @@
-from __future__ import print_function
-from turtle import st
 import mysql.connector
 import persona, colegio
 
@@ -79,4 +77,3 @@ class SchoolerzDatabase:
         for data in self.cursor.fetchone():
             SchoolData.append(data)
         School = colegio.School(SchoolData[1], SchoolData[2], SchoolData[3], SchoolData[4], SchoolData[5], SchoolData[6], SchoolData[7])
-        return School
