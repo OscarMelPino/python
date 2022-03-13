@@ -51,3 +51,27 @@ def GetSchoolNameFromManager(nick, cursor):
     cursor.execute(sql)
     schoolname = cursor.fetchone()['sz_006_name']
     return schoolname
+
+def GetSchoolData(cursor):
+    cole = Manager.RetCole()
+    sql = f"SELECT sz_006_name, SZ_006_SchoolCode, SZ_006_Country, SZ_006_City, SZ_006_PostalCode, SZ_006_Address FROM `sz_006_schools` where sz_006_name LIKE '{cole}';"
+    cursor.execute(sql)
+    school = [cursor.fetchone()['sz_006_name'], cursor.fetchone()['SZ_006_SchoolCode'],
+              cursor.fetchone()['SZ_006_Country'], cursor.fetchone()['SZ_006_City'],
+              cursor.fetchone()['SZ_006_PostalCode'], cursor.fetchone()['SZ_006_Address']]
+    return school # Devuelve una lista con los datos del cole para meterlos en un formulario y 
+                  #si los queremos cambiar cambiarlos o borrar dentro del html en el que se cargan
+
+def GetParentData(cursor):
+    cole = Manager.RetCole()
+    sql = f"SELECT sz_003_name, SZ_003_SN1, SZ_003_SN2, SZ_003_Birth, SZ_003_Nationality, SZ_003_Country, SZ_003_City, SZ_003_PostalCode, SZ_003_Address, SZ_003_Nick, SZ_003_Email, SZ_003_Phone1, SZ_003_Phone2 FROM `sz_006_schools` where sz_006_name LIKE '{cole}';"
+    cursor.execute(sql)
+    parent = [cursor.fetchone()['sz_003_name'], cursor.fetchone()['SZ_003_SN1'],
+              cursor.fetchone()['SZ_003_SN2'], cursor.fetchone()['SZ_003_Birth'],
+              cursor.fetchone()['SZ_003_Nationality'], cursor.fetchone()['SZ_003_Country'],
+              cursor.fetchone()['SZ_003_City'], cursor.fetchone()['SZ_003_PostalCode'],
+              cursor.fetchone()['SZ_003_Address'], cursor.fetchone()['SZ_003_Nick'],
+              cursor.fetchone()['SZ_003_Email'], cursor.fetchone()['SZ_003_Phone1'],
+              cursor.fetchone()['SZ_003_Phone2']]
+    return parent # Devuelve una lista con los datos del padre para meterlos en un formulario y 
+                  #si los queremos cambiar cambiarlos o borrar dentro del html en el que se cargan

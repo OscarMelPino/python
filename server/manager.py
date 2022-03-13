@@ -1,3 +1,6 @@
+from gc import collect
+
+
 class Manager():
     def __init__(self, nick, name, surn1, surn2, cole):
         self.nick = nick
@@ -6,4 +9,5 @@ class Manager():
         self.surn2 = surn2
         self.cole = cole
 
-
+    def RetCole(self) -> str:
+        return f'{self.cole}'
