@@ -1,177 +1,39 @@
-import database_connection
+import pymysql
 
 # VARIABLES
-MyDB = database_connection.SchoolerzDatabase
-userType = ''
 
-manager = False
-manager_nick = ''
+#user = username
+#password = password
+#userType = tipe
+# if manager:
+# 	manager_nick = userType + user
+def DataB():
+    miConexion = None
+    cursor = None
+    miConexion = pymysql.connect(host = 'localhost' , user = 'root', passwd = '7101991a', db = 'schoolerzz', port = 3306, cursorclass=pymysql.cursors.DictCursor)
+    cursor = miConexion.cursor()
+    return cursor
+ 
+def Log(cursor, t, user, passw):
+    # sql = f"SELECT sz_007_name FROM `sz_007_school_managers` where sz_007_Nick like '{user}' and sz_007_password like '{passw}' ;"
+    sql = "set @a = -1;" 
+    cursor.execute(sql)
 
-def Welcome():
-	print("*******************************")
-	print("***      MENU PRINCIPAL     ***")
-	print("*******************************")
-	print("*** 1. ENTRAR               ***")
-	print("*** 2. VOLVER AL INICIO     ***")
-	print("*******************************")
-	WelcomeActions(SelectOption(2))
+    sql = f"call `pa_LoginAJ`('{t}','{user}','{passw}', @a);"
+    cursor.execute(sql)
 
-def SelectOption(max) -> int:
-	valid = False
-	while not valid:
-		try:
-			option = int(input("Elige una opción.\n> "))
-			if option > 0 and option < max + 1:
-				return option
-		except:
-			print("Eso no es un número, bobo.")
-
-def MainLogin(tipe,username, password):
-	global manager_nick
-	user = username
-	password = password
-	userType = tipe
-	if manager:
-		manager_nick = userType + user
-	return MyDB.Login(MyDB, userType, user, password)
-
-def WelcomeActions(cosa):
-	global manager_nick 
-	if cosa == 1:
-		if not MainLogin():
-			manager_nick = ''
-			print("Datos incorrectos.")
-			Welcome()
-			return
-		# Login valido, hacer cosas de después
-	if cosa == 2:
-		UserType()
-		print("Nos vemos pronto.")
-		exit
-
-def ManagerActionsMenu():
-	if not manager:
-		Welcome()
-		return
-	print("*******************************")
-	print("*** ¿QUE QUIERES HACER?     ***")
-	print("*** 1. REGISTRAR            ***")
-	print("*** 2. MODIFICAR            ***")
-	print("*** 3. BORRAR               ***")
-	print("*** 4. SALIR                ***")
-	print("*******************************")
-	manageraction = SelectOption(4)
-	if manageraction == 4: userType()
-	print("*** ¿SOBRE QUIÉN?           ***")
-	print("*** 1. ESTUDIANTE           ***")
-	print("*** 2. DOCENTE              ***")
-	print("*** 3. TUTOR                ***")
-	print("*** 4. ADMINISTRADOR/A      ***")
-	print("*** 5. SALIR                ***")
-	target = SelectOption(5)
-	if target == 5: userType()
-	ManagerActions(manageraction, target)
-
-def ManagerActions(action, targetType):
-	if action == 1: Registrar(targetType)
-	if action == 2: Modificar(targetType)
-	if action == 3: Borrar(targetType)
-
-def Registrar(targetType):
-	if targetType == 1: RegistrarEstudiante()
-	if targetType == 2: RegistrarDocente()
-	if targetType == 3: RegistrarTutor()
-	if targetType == 4: 
-		print("No se puede registrar otro administrador de esta manera.")
-		return
-	
-
-def RegistrarEstudiante():
-	nombre = input("Introduce un nombre.\n> ")
-	ape1 = input("Introduce primero apellido.\n> ")
-	ape2 = input("Introduce segundo apellido.\n> ")
-	nacimiento = input("Introduce fecha de nacimiento.\n> ")
-	nacionalidad = input("Introduce nacionalidad.\n> ")
-	pais = input("Introduce país de residencia.\n> ")
-	ciudad = input("Introduce ciudad de residencia.\n> ")
-	postCode = input("Introduce código postal.\n> ")
-	direc = input("Introduce dirección.\n> ")
-	email = input("Introduce dirección de correo electrónico.\n> ")
-	password = input("Introduce una contraseña.\n> ")
-	# MyDB.CreateNewStudent( más todo lo de arriba)
-	if not MyDB.CreateNewStudent(MyDB, nombre, ape1, ape2, nacimiento, nacionalidad, pais, ciudad, postCode, direc, email, password):
-		print("Algo ha fallado, revise los datos.")
-		ManagerActionsMenu()
-		return
-	print("Estudiante registrado con éxito.")
-	ManagerActionsMenu()
-
-		
-def RegistrarDocente():
-	pass
-
-def RegistrarTutor():
-	pass
-
-def Modificar(targetType):
-	if targetType == 1: ModificarEstudiante()
-	if targetType == 2: ModificarDocente()
-	if targetType == 3: ModificarTutor()
-	if targetType == 4: ModificarAdministrador()
-
-def ModificarEstudiante():
-	pass
-
-def ModificarDocente():
-	pass
-
-def ModificarTutor():
-	pass
-
-def ModificarAdministrador():
-	pass
-
-def Borrar(targetType):
-	if targetType == 1: BorrarEstudiante()
-	if targetType == 2: BorrarDocente()
-	if targetType == 3: BorrarTutor()
-	if targetType == 4: BorrarAdministrador()
-
-def BorrarEstudiante():
-	pass
-
-def BorrarDocente():
-	pass
-
-def BorrarTutor():
-	pass
-
-def BorrarAdministrador():
-	pass
-
-def UserType():
-	global userType
-	global manager
-	print("*******************************")
-	print("*** BIENVENIDO A SCHOOLERZZ ***")
-	print("*******************************")
-	print("*** ¿QUIÉN ERES?            ***")
-	print("*** 1. ESTUDIANTE           ***")
-	print("*** 2. DOCENTE              ***")
-	print("*** 3. TUTOR                ***")
-	print("*** 4. ADMINISTRADOR/A      ***")
-	print("*** 5. SALIR                ***")
-	print("*******************************")
-	useroption = SelectOption(5)
-	if useroption == 1: userType = 'S'
-	if useroption == 2: userType = 'T'
-	if useroption == 3: userType = 'P'
-	if useroption == 4: 
-		userType = 'M'
-		manager = True
-	if useroption == 5: exit()
-	Welcome()
-
-# MAIN
-if __name__ == "__main__":
-	UserType()
+    sql = "select @a;"
+    cursor.execute(sql)
+    
+    data = cursor.fetchone()
+    
+    return data['@a']
+ 
+def Parents(cursor):
+    sql = "SELECT sz_003_name, sz_003_nick FROM `sz_003_parents`;"
+    cursor.execute(sql)
+    lista = [] 
+    for result in cursor.fetchall():
+        for columna in result:
+            lista.append(result[columna])
+    return lista
