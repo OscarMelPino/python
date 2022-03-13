@@ -62,9 +62,8 @@ def GetSchoolData(cursor):
     return school # Devuelve una lista con los datos del cole para meterlos en un formulario y 
                   #si los queremos cambiar cambiarlos o borrar dentro del html en el que se cargan
 
-def GetParentData(cursor):
-    cole = Manager.RetCole()
-    sql = f"SELECT sz_003_name, SZ_003_SN1, SZ_003_SN2, SZ_003_Birth, SZ_003_Nationality, SZ_003_Country, SZ_003_City, SZ_003_PostalCode, SZ_003_Address, SZ_003_Nick, SZ_003_Email, SZ_003_Phone1, SZ_003_Phone2 FROM `sz_006_schools` where sz_006_name LIKE '{cole}';"
+def GetParentData(cursor, parentNick):
+    sql = f"SELECT sz_003_name, SZ_003_SN1, SZ_003_SN2, SZ_003_Birth, SZ_003_Nationality, SZ_003_Country, SZ_003_City, SZ_003_PostalCode, SZ_003_Address, SZ_003_Nick, SZ_003_Email, SZ_003_Phone1, SZ_003_Phone2 FROM `sz_003_parents` where sz_003_nick LIKE '{parentNick}';"
     cursor.execute(sql)
     parent = [cursor.fetchone()['sz_003_name'], cursor.fetchone()['SZ_003_SN1'],
               cursor.fetchone()['SZ_003_SN2'], cursor.fetchone()['SZ_003_Birth'],
