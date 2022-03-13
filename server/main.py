@@ -7,7 +7,6 @@ userType = ''
 manager = False
 manager_nick = ''
 
-
 def Welcome():
 	print("*******************************")
 	print("***      MENU PRINCIPAL     ***")
@@ -27,11 +26,11 @@ def SelectOption(max) -> int:
 		except:
 			print("Eso no es un número, bobo.")
 
-def MainLogin(username, password):
+def MainLogin(tipe,username, password):
 	global manager_nick
 	user = username
 	password = password
-	userType = 'M'
+	userType = tipe
 	if manager:
 		manager_nick = userType + user
 	return MyDB.Login(MyDB, userType, user, password)
