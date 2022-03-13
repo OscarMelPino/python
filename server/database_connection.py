@@ -26,6 +26,7 @@ class SchoolerzDatabase:
         self.CreateConnection(self)
         self.cursor.execute(procedure)
         self.cursor.execute("SELECT @out;")
+        self.miConexion.commit()
         ret = self.cursor.fetchone()[0]
         self.CloseConnection(self)
         return ret
@@ -33,18 +34,17 @@ class SchoolerzDatabase:
     def ExecuteProcedureWithoutOutParams(self, procedure):
         self.CreateConnection(self)
         try:
-            self.cursor.execute(procedure)
-            res = self.cursor.fetchone()
-            self.CloseConnection(self)
+            print(procedure)
+            self.cursor.execute(procedure, multi=True)
+            return self.cursor.fetchone()
         except Exception as e:
             print(str(e)) 
 
     def Login(self, usertype, user, password):
-        self.prueba(self)
-        # query = f"CALL `loginAJ`('{usertype}','{user}','{password}',@out);"
-        # if self.ExecuteProcedure(self, query) == 0:
-        #     return self.GetDataFromUser(self, usertype + user)
-        # return None
+        query = f"CALL `loginAJ`('{usertype}','{user}','{password}',@out);"
+        if self.ExecuteProcedure(self, query) == 0:
+            return self.GetDataFromUser(self, usertype + user)
+        return None
 
     def GetDataFromUser(self, nick):
         query = f"CALL `GetUserByNick2`('{nick}');"
