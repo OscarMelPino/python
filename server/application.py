@@ -2,6 +2,9 @@ from flask import Flask, jsonify, request
 import json, os, shutil
 import main as app
 from main import DataB
+import webbrowser
+
+
 
 
 
@@ -20,11 +23,7 @@ def Login():
     tipe = request.form['usertype']
     cosa = app.Log(DataB(), tipe, user, pwd)
     if cosa == 0:
-        lista = app.Parents(DataB())
-        for l in lista:
-            pal += str(l)
-        return pal
-    return 'maaaaal'
+        webbrowser.open('http://localhost:5000', 0, False)
         # lista = app.Parents(DataB())
         # for l in lista:
         #     print(l)
