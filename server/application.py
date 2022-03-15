@@ -31,70 +31,89 @@ def Login():
         return 'Forbidden access', 403
 
 # MANAGER
-@application.route('/manager', methods=['GET'])
+@application.route('/managers', methods=['GET'])
 def GetManagers():
-    return GetAllManagers()
+    return GetAllManagers(DataB())
 
-@application.route('/manager/<int:id>', methods=['GET'])
+@application.route('/managers/<int:id>', methods=['GET'])
 def GetManagerById(id):
-    manager = GetManagerB()
+    manager = GetManagerById(DataB())
     return manager
 
-@application.route('/manager', methods=['POST'])
+@application.route('/managers', methods=['POST'])
 def CreateManager():
     # funcion que coge datos y devuelve resultado
     return True
 
-@application.route('/manager/<int:id>', methods=['PUT'])
+@application.route('/managers/<int:id>', methods=['PUT'])
 def ModifyManager(id):
-    # cosas
+    ModifyManager(DataB(), GetManagerById(id))
     return True
 
-@application.route('/manager/<int:id>', methods=['DELETE'])
+@application.route('/managers/<int:id>', methods=['DELETE'])
 def DeleteManager(id):
     # cosas
     return True
 # END MANAGER
 
+
 # PARENTS
 @application.route('/parents', methods=['GET'])
+def GetParent():
+    return jsonify(GetAllParents(DataB(),"Joyfe")), 200
+
+@application.route('/delparents', methods=['GET'])
+def DeleteParents():
+    MyParentsList = GetAllParents(DataB(), "Joyfe")
+    if request.form["idD"] is not None:
+        DeleteParent(DataB(), MyParentsList[request.form["idD"]]["sz_003_nick"])
+        return True
+    return MyParentsList.__len__()
+
+@application.route('/idparents', methods=['GET'])
 def GetParents():
-    return jsonify(GetAllParents(DataB(), 'Joyfe')), 200
+    id = str(request.form.get["id"], False)
+    if id is not None:
+        url = "http://localhost:5000/parentdata/" + id
+        webbrowser.open(url, 0, False)
+    return jsonify(GetAllParents(DataB(), "Joyfe")), 200
 
-@application.route('/parents/<int:id>', methods=['GET'])
+@application.route('/parentdata/<int:id>', methods=['GET'])
 def GetParentsById(id):
-    return parent
+    MyParentsList = GetAllParents(DataB(),"Joyfe")
+    parent = MyParentsList[id]
+    return jsonify(parent)
 
-@application.route('/parents', methods=['POST'])
+@application.route('/addparent', methods=['POST'])
 def CreateParent():
-    # funcion que coge datos y devuelve resultado
-    return True
-
-@application.route('/parents/<int:id>', methods=['PUT'])
-def ModifyParent(id):
-    # cosas
-    return True
-
-@application.route('/parents/<int:id>', methods=['DELETE'])
-def DeleteParent(id):
-    # cosas
-    return True
+    AddParent(DataB(), request.form["name"], request.form["SN1"], request.form["SN2"], 
+              request.form["birth"], request.form["nationality"], request.form["country"], 
+              request.form["city"], request.form["postalCode"], request.form["address"], 
+              request.form["email"], request.form["phone1"], request.form["phone2"],
+              "Joyfe", request.form["sNick"])
+    return 201
 
 # END PARENT
 
 
 # STUDENTS
-@application.route('/students', methods=['GET'])
+@application.route('/students/', methods=['GET'])
 def GetStudents():
+    temp = request.form['id']
+    print(temp)
+    if temp is None:
+        return id()
     return jsonify(GetAllStudents(DataB()))
 
 @application.route('/students/<int:id>', methods=['GET'])
 def GetStudentById(id):
-    return student
+    MyStudentsList = GetAllStudents(DataB())
+    student = MyStudentsList[id]
+    return jsonify(student)
 
 @application.route('/students', methods=['POST'])
 def CreateStudent():
-    # funcion que coge datos y devuelve resultado
+    AddStudent(DataB, request.form['name'],request.form['sn1'], request.form['sn2'], request.form['birth'], request.form['nation'], request.form['country'], request.form['postalCode'], request.form['address'], request.form['email'], request.form['medical'], request.form['observations'], 'Joyfe')
     return True
 
 @application.route('/students/<int:id>', methods=['PUT'])
@@ -104,10 +123,16 @@ def ModifyStudent(id):
 
 @application.route('/students/<int:id>', methods=['DELETE'])
 def DeleteStudent(id):
-    # cosas
+    DeleteStudent(DataB, request.form['nick'])
     return True
 
 # END STUDENTS
+
+def id():
+    url = "http://localhost:5000/students/"
+    id = request.form['id']
+    url += id
+    webbrowser.open(url)
 
 if __name__ == '__main__':
     application.run(debug=False)

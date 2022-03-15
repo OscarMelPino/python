@@ -1,3 +1,4 @@
+from datetime import datetime
 from pickle import NONE
 import pymysql
 from manager import Manager
@@ -10,8 +11,6 @@ MyManagersList= []
 MyStudentsList= []
 MyParentsList= []
 MyTeachersList= []
-
-
 
 #user = username
 #password = password
@@ -209,9 +208,12 @@ def DeleteStudent(cursor, _Nick):
     cursor.execute(sql)
 
 def GetAllStudents(cursor):
+    lastId = 0
     sql = f"select sz_002_name, sz_002_sn1, sz_002_sn2, sz_002_nick from sz_002_students;"
     cursor.execute(sql)
     for row in cursor.fetchall():
+        lastId += 1
+        row['id'] = lastId
         MyStudentsList.append(row)
     return MyStudentsList
 # insert into sz_203_students_parents values(UUID_TO_BIN(UUID()), (select sz_002_id from sz_002_students where sz_sn1 = 'Melgarejo'), (select sz_003_id from sz_003_parents where SZ_003_Name = 'Padrecito'))
@@ -230,3 +232,76 @@ def GetAllTeachers(cursor, school):
     for row in cursor.fetchall():
         lista.append(row)
     return lista
+
+
+#  MANAGERS
+def GetAllManagers(cursor):
+    lastId = 0
+    sql = f"SELECT  sz_007_name, sz_007_sn1, SZ_007_SN2, SZ_007_Nick from sz_007_teachers;"
+    cursor.cursor.execute(sql)
+    for row in cursor.fetchall():
+        lastId += 1
+        row['id'] = lastId
+        MyManagersList.append(row)
+    return MyManagersList
+
+def GetManagerById(cursor):
+    pass
+
+def CreateManager(cursor, data):
+    pass
+
+def ModifyManager(cursor, manager):
+    pass
+
+def DeleteManager(cursor, manager):
+    pass
+
+
+
+def DeleteParent(cursor, _Nick):
+    sql = f"delete from sz_003_parents where SZ_003_Nick = '{_Nick}';"
+    cursor.execute(sql)
+
+def GetAllParents(cursor, school):
+    sql = f"select sz_003_name, sz_003_sn1, sz_003_sn2, sz_003_nick from sz_003_parents join sz_203_students_parents on sz_203_parents_id = sz_003_id join sz_002_students on sz_203_students_id = sz_002_id join sz_102_groups_students on SZ_102_Students_Id = sz_002_id join sz_001_groups on sz_001_id = SZ_102_Groups_Id join sz_006_schools on sz_006_id = SZ_001_Schools_Id where sz_006_name like '{school}';"
+    cursor.execute(sql)
+    lista = []
+    for row in cursor.fetchall():
+        row['id'] = 0
+        lista.append(row)
+    return lista
+
+def Parents(cursor):
+    sql = "SELECT sz_003_name, sz_003_nick FROM sz_003_parents;"
+    cursor.execute(sql)
+    lista = []
+    for result in cursor.fetchall():
+        for columna in result:
+            lista.append(result[columna])
+    return lista
+
+
+def GetParentData(cursor, parentNick):
+    sql = f"SELECT sz_003_name, SZ_003_SN1, SZ_003_SN2, SZ_003_Birth, SZ_003_Nationality, SZ_003_Country, SZ_003_City, SZ_003_PostalCode, SZ_003_Address, SZ_003_Nick, SZ_003_Email, SZ_003_Phone1, SZ_003_Phone2 FROM sz_003_parents where sz_003_nick LIKE '{parentNick}';"
+    cursor.execute(sql)
+    parent = []
+    for row in cursor.fetchall():
+        for column in row:
+            parent.append(row[column])
+    return parent # Devuelve una lista con los datos del padre para meterlos en un formulario y
+                    #si los queremos cambiar cambiarlos o borrar dentro del html en el que se cargan
+def AddParent(cursor, Pname, Psn1, Psn2, Pbirth, Pnationality, Pcountry, Pcity, PpostalCode, Paddress, Pemail, Pphone1, Pphone2,  Sschool, Snick):
+    Pnick = CreateNick(cursor,'P',Sschool,Pname, Psn1, Psn2)
+    fecha = datetime.strptime(Pbirth, "%Y/%m/%d")
+    if Pphone2 == None:
+        sql =f"INSERT INTO sz_003_parents (SZ_003_Id, SZ_003_Name, SZ_003_SN1, SZ_003_SN2, SZ_003_Birth, SZ_003_Nationality, SZ_003_Country, SZ_003_City, SZ_003_PostalCode, SZ_003_Address, SZ_003_Email, SZ_003_Nick, SZ_003_Password, SZ_003_Phone1) VALUES(UUID_TO_BIN(UUID()),'{Pname}', '{Psn1}', '{Psn2}', '{fecha}', '{Pnationality}', '{Pcountry}', '{Pcity}', '{PpostalCode}', '{Paddress}', '{Pemail}','{Pnick}','1234', '{Pphone1}');"
+        print(sql)
+    else:
+        sql1 =f"INSERT INTO sz_003_parents (SZ_003_Id,SZ_003_Name,SZ_003_SN1,SZ_003_SN2,SZ_003_Birth,SZ_003_Nationality,SZ_003_Country,SZ_003_City,SZ_003_PostalCode,SZ_003_Address,SZ_003_Email,SZ_003_Nick,SZ_003_Password,SZ_003_Phone1,SZ_003_Phone2)VALUES (UUID_TO_BIN(UUID()),'{Pname}', '{Psn1}', '{Psn2}', '{fecha}', '{Pnationality}', '{Pcountry}', '{Pcity}', '{PpostalCode}', '{Paddress}', '{Pemail}', '{Pnick}','1234', '{Pphone1}', '{Pphone2}');"
+        print(sql1)
+        cursor.execute(sql1)
+
+    sql=f"INSERT INTO sz_203_students_parents VALUES (UUID_TO_BIN(UUID()), (SELECT SZ_002_Id FROM sz_002_Students WHERE SZ_002_Nick LIKE '{Snick}'), (SELECT SZ_003_Id FROM SZ_003_Parents where SZ_003_Name LIKE '{Pname}' and SZ_003_SN1 LIKE '{Psn1}' and SZ_003_SN2 LIKE '{Psn2}'));"
+    cursor.execute(sql)
+    return 'OK'

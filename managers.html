@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Get Student Data</title>
+</head>
+<body>
+    <div class = 'container'>
+        <h2> Añadir manager </h2>
+        <form action="http://localhost:5000/managers" method="post">
+            <input type="" name="name" placeholder="Nombre" />
+            <br>
+            <input type="text" name="SN1" placeholder="Apellido 1" />
+            <br>
+            <input type="text" name="SN2" placeholder="Apellido 2" />
+            <br>
+            <input type="submit"/>
+        </form>
+
+        <h2> Ver managers </h2>
+        <form action="http://localhost:5000/managers" method="get">
+            <input type="submit" value="Buscar"/>
+        </form>
+
+        <h2> Modificar manager </h2>
+        <form action="http://localhost:5000/managers" method="put">
+            <input type="" name="name" placeholder="Nombre" />
+            <br>
+            <input type="text" name="SN1" placeholder="Apellido 1" />
+            <br>
+            <input type="text" name="SN2" placeholder="Apellido 2" />
+            <br>
+            <input type="submit"/>
+        </form>
+        
+    </div>
+</body>
+</html>
