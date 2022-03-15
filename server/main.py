@@ -6,6 +6,13 @@ import hashlib
 
 # VARIABLES
 
+MyManagersList= []
+MyStudentsList= []
+MyParentsList= []
+MyTeachersList= []
+
+
+
 #user = username
 #password = password
 #userType = tipe
@@ -14,7 +21,7 @@ import hashlib
 def DataB():
     miConexion = None
     cursor = None
-    miConexion = pymysql.connect(host = 'localhost' , user = 'root', passwd = '7101991a', db = 'schoolerzz', port = 3306, cursorclass=pymysql.cursors.DictCursor)
+    miConexion = pymysql.connect(host = 'localhost' , user = 'root', passwd = '1234', db = 'schoolerzz', port = 3306, cursorclass=pymysql.cursors.DictCursor)
     cursor = miConexion.cursor()
     return cursor
 
@@ -200,3 +207,26 @@ def DeleteParent(cursor, _Nick):
 def DeleteStudent(cursor, _Nick):
     sql = f"delete from sz_002_students where SZ_002_Nick = '{_Nick}';"
     cursor.execute(sql)
+
+def GetAllStudents(cursor):
+    sql = f"select sz_002_name, sz_002_sn1, sz_002_sn2, sz_002_nick from sz_002_students;"
+    cursor.execute(sql)
+    for row in cursor.fetchall():
+        MyStudentsList.append(row)
+    return MyStudentsList
+# insert into sz_203_students_parents values(UUID_TO_BIN(UUID()), (select sz_002_id from sz_002_students where sz_sn1 = 'Melgarejo'), (select sz_003_id from sz_003_parents where SZ_003_Name = 'Padrecito'))
+def GetAllParents(cursor, school):
+    sql = f"select sz_003_name, sz_003_sn1, sz_003_sn2, sz_003_nick from sz_003_parents join sz_203_students_parents on sz_203_parents_id = sz_003_id join sz_002_students on sz_203_students_id = sz_002_id join sz_102_groups_students on SZ_102_Students_Id = sz_002_id join sz_001_groups on sz_001_id = SZ_102_Groups_Id join sz_006_schools on sz_006_id = SZ_001_Schools_Id where sz_006_name like '{school}';"
+    cursor.execute(sql)
+    lista = []
+    for row in cursor.fetchall():
+        lista.append(row)
+    return lista
+
+def GetAllTeachers(cursor, school):
+    sql = f"select sz_008_name, sz_008_sn1, SZ_008_SN2, SZ_008_Nick from sz_008_teachers join sz_001_groups on SZ_008_Id = SZ_001_Teachers_Id join sz_006_schools on SZ_006_Id = SZ_001_Schools_Id where SZ_006_Name like '{school}';"
+    cursor.execute(sql)
+    lista = []
+    for row in cursor.fetchall():
+        lista.append(row)
+    return lista

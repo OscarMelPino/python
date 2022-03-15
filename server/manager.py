@@ -9,5 +9,5 @@ class Manager():
         self.surn2 = surn2
         self.cole = cole
 
-    def RetCole(self) -> str:
+    def GetColegio(self) -> str:
         return f'{self.cole}'
